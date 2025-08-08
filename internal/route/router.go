@@ -44,7 +44,7 @@ func (h *Handler) GetHandler(path string) http.HandlerFunc {
 func registerHandlers(publicKeyPath, privateKeyPath string) *Handler {
 	var handlers *Handler = &Handler{handlers: map[string]http.HandlerFunc{}}
 
-	handlers.AddHandler("/account/", authentication.AuthMiddleware(publicKeyPath)(handler.AccountHandler))
+	handlers.AddHandler("/account/", authentication.AuthMiddleware(publicKeyPath)(authentication.UserOnly(handler.AccountHandler)))
 	handlers.AddHandler("/admin/", authentication.AuthMiddleware(publicKeyPath)(authentication.ManagerOnly(handler.AdminHandler)))
 	handlers.AddHandler("/auth/", handler.AuthenticationHandler(privateKeyPath))
 
